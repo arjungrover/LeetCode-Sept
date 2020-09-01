@@ -1,0 +1,157 @@
+/*
+Approach 1: FAILED
+eg: [2,0,6,6]  -> 06:26 output
+
+Approach was first digit can be [0-1][0-9]:[0-5][0-9] / [2][0-3]:[0-5][0-9]  {Loop and flag is used}
+
+class Solution {
+
+    public boolean hasDigit(int dig, HashMap<Integer,Integer> hmap){
+        
+        if(hmap.containsKey(dig)){
+            hmap.put(dig, hmap.get(dig)-1);
+            if(hmap.get(dig)==0)
+                hmap.remove(dig);
+            
+            return true;
+        }else{
+            return false;
+        }
+    }
+    
+    public String largestTimeFromDigits(int[] A) {
+        
+        HashMap<Integer,Integer> hmap = new HashMap<>();
+        for(int e:A){
+            hmap.put(e, hmap.getOrDefault(e,0)+1);
+        }
+        
+        String time = "";
+        boolean flag = false;
+        
+        for(int i=2;i>=0;i--){
+            if(!flag && hasDigit(i,hmap)){
+                time+=(i+"");
+                flag=true;
+            }else if(flag)
+                break;
+        }
+        
+        if(!flag){
+            return "";
+        }
+        
+        flag=false;
+        if(time.charAt(0)=='2'){
+            //[0,3]
+            
+            for(int i=3;i>=0;i--){
+                
+                if(!flag && hasDigit(i,hmap)){
+                    
+                    time+=(i+"");
+                    flag=true;
+                }else if(flag)
+                    break;     
+            }
+  
+        }else{
+            //[0,9]
+            
+            for(int i=9;i>=0;i--){
+                if(!flag && hasDigit(i, hmap) ){
+                    time+=(i+"");
+                    flag=true;
+                }else if(flag)
+                    break;
+            }
+            
+        }
+         
+        if(!flag){
+            return "";
+        }
+        
+        flag=false;
+        time+=":";
+        
+        //[0-5]
+        for(int i=5;i>=0;i--){
+            if(!flag && hasDigit(i, hmap)){
+                    time+=(i+"");
+                    flag=true;
+                }else if(flag)
+                    break;
+        }
+        
+        if(!flag){
+            return "";
+        }
+        
+        flag=false;
+        for(int i=9;i>=0;i--){
+            if(!flag && hasDigit(i, hmap)){
+                    time+=(i+"");
+                    flag=true;
+                }else if(flag)
+                    break;
+        }
+        
+        return time;
+        
+    }
+}
+
+
+Approach 2: Generate ALL PERMUTATIONS and check for the largest and valid time.
+
+Here 
+
+
+
+
+*/
+
+class Solution {
+    public String largestTimeFromDigits(int[] A) {
+        int[] ans = new int[]{-1};
+        permutations(A,new boolean[A.length],0, ans, 0);
+        if(ans[0]==-1)
+            return "";
+        else
+            return getTime(ans[0]);
+    }
+    private String getTime(int time){
+        int hour = time/100;
+        int min = time%100;
+        //for [0,0,0,0] -> min<10
+        return (hour<10?"0"+hour:hour)+":"+(min<10?"0"+min:min);
+    }
+    private void permutations(int[] A, boolean[] used, int sum, int[] ans, int count){
+        if(count==A.length)
+        {   
+            ans[0]=Math.max(ans[0], sum);
+            return;
+        }
+        for(int i=0;i<A.length;i++){
+            
+            if(!used[i]){
+                int num = (sum*10)+A[i];    
+                //sum = (sum*10)+A[i] cant be used ;
+                // if it got discarded then sum value cant be reversed back
+                
+                
+                //discarding value which is not in our format
+                if(count==1 && (num<0 || num>=24))    //edge of recusrion tree
+                    continue;
+                
+                if(count==3 && (num%100<0 || num%100>=60))
+                    continue;
+                
+                used[i]=true;
+                permutations(A, used, num, ans, count+1);
+                used[i]=false;
+            }
+        }
+    }
+}
