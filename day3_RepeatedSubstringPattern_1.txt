@@ -1,0 +1,50 @@
+/*
+
+APPROACH 1: Checking for every substring if remaining string can be formed.
+
+Time Complexity : O(n^2)
+Space Complexity : O(n)
+
+APPROACH 2 : using KMP ALGORITHM
+
+
+*/
+
+
+class Solution {
+    public boolean check(String str, String pattern){
+   
+        if(pattern.length()<str.length() || pattern.length()%str.length()!=0)
+            return false;
+        else if(pattern.length()==str.length())
+            return (pattern.equals(str));
+        else
+        {
+            
+            int i=0;
+            while(i!=pattern.length())
+            {   
+                if(!pattern.substring(i,i+str.length()).equals(str))
+                    return false;
+                else
+                    i+=str.length();
+                
+            }
+            
+            return true;
+        }
+    }
+    
+    public boolean repeatedSubstringPattern(String s) {
+        if(s.length()<=1)
+            return false;
+        
+        for(int i=1;i<=s.length()/2;i++){
+            String str = s.substring(0,i);
+            if(check(str,s.substring(i)))
+                return true;
+        }
+        
+        return false;
+    }
+}
