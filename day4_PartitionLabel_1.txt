@@ -1,0 +1,65 @@
+/*
+[AMAZON INTERVIEW QUESTION]
+
+What is required is that no 2 partitions can have the same characters in them.
+So what we are going to do is the following:
+1. Have a frequency table/array(called right) of the whole string.
+2. Iterate over string from the left and storing all character we have seen in a set and update the frequency table of the right.
+3. Whenever we have a character turn 0 in the table(the character is only in the left) we remove it from the seen set as it is only in the left now.
+4. If seen is empty that means that everything on the left is only in that partition hence we can add it to the ans array reset our count
+
+
+Intution : 
+we have to find that point where all seen elements have their maximum frequency .
+so we are achieving by using hashset to keep an account of all seen             e   elements and hashMap to  keep their frequencies.
+           
+T: O(n)
+S: O(n)
+
+
+*/
+
+
+class Solution {
+    public List<Integer> partitionLabels(String S) {
+        
+        List<Integer> res = new ArrayList<>();
+       
+        if(S.length()==0)
+            return res;
+        
+        HashMap<Character,Integer> fmap = new HashMap<>(); 
+        
+        for(char ch: S.toCharArray()){
+            fmap.put(ch, fmap.getOrDefault(ch,0)+1);
+        }
+        
+        HashSet<Character> seen = new HashSet<>();
+        
+        int size = 0;
+        for(int i=0;i<S.length();i++){
+            
+            char ch = S.charAt(i);
+            
+            seen.add(ch);
+            size++;
+            
+            fmap.put(ch,fmap.get(ch)-1);
+            
+            if(fmap.get(ch)==0)
+            {
+                fmap.remove(ch);
+                 seen.remove(ch);
+            }
+            
+            if(seen.size()==0){
+                res.add(size);
+                size = 0;
+            }
+            
+        }
+        
+        return res;
+        
+    }
+}
