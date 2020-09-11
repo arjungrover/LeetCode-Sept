@@ -1,0 +1,26 @@
+class Solution {
+    public int compareVersion(String version1, String version2) {
+        String[] arr1 = version1.split("\\.");
+        String[] arr2 = version2.split("\\.");
+        
+        int first = 0, second = 0;
+        
+        while(first<arr1.length || second<arr2.length ){
+            
+            int n1 = ( first<arr1.length )?Integer.valueOf(arr1[first]):0;
+            int n2 = ( second<arr2.length )?Integer.valueOf(arr2[second]):0;
+            
+            if(n1>n2)
+                return 1;
+            else if(n1<n2)
+                return -1;
+            else{
+                first++;
+                second++;
+            }
+            
+        }
+        
+        return 0;
+    }
+}
