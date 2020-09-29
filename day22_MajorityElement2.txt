@@ -1,0 +1,67 @@
+/* 
+Brute Force Approach - using HashMap 
+ HashMap<Integer,Integer> fmap = new HashMap<>();
+        for(int e:nums){
+            fmap.put(e, fmap.getOrDefault(e,0)+1);
+        }
+        
+        List<Integer> res = new ArrayList<>();
+        for(int key:fmap.keySet()){
+            if(fmap.get(key)>(nums.length/3))
+                res.add(key);
+        }
+        
+        return res;
+
+*/
+/*
+Moore's Voting Algorithm -> used for finding majority element (element which comes >size/2 times)
+This question uses that variation of moore's voting algorithm.
+
+when we divide the whole array into 3 parts, we can say that we can have max of two majority elements.
+so, we try to run the moore's voting algorithm on both of them simultanously.
+
+*/
+
+class Solution {
+    public List<Integer> majorityElement(int[] nums) {
+        
+       int first = Integer.MAX_VALUE, second = Integer.MAX_VALUE;
+        int count1 = 0, count2 = 0;
+        
+        for(int e: nums){
+            
+            if(e==first)
+                count1++;
+            else if(e==second)
+                count2++;
+            else if(count1==0){
+                first = e;
+                count1++;
+            }else if(count2==0){
+                second = e;
+                count2++;
+            }else{
+                count1--;
+                count2--;
+            }
+            
+        }
+        
+        count1 = 0; count2 = 0;
+        for(int e: nums){
+            if(e==first)
+                count1++;
+            if(e==second)
+                count2++;
+        }
+        
+        List<Integer> res = new ArrayList<>();
+        if(count1>nums.length/3)
+            res.add(first);
+        if(count2>nums.length/3)
+            res.add(second);
+        
+        return res;
+    }
+}
