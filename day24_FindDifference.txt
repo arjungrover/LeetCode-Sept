@@ -1,0 +1,46 @@
+/*
+    FREQUENCY SOLUTION-
+        
+        HashMap<Character,Integer> fmap = new HashMap<>();
+        for(char ch: s.toCharArray()){
+            fmap.put(ch, fmap.getOrDefault(ch,0)+1);
+        }
+        
+        for(char ch: t.toCharArray()){
+            if(!fmap.containsKey(ch))
+                return ch;
+            
+            fmap.put(ch,fmap.get(ch)-1);
+            if(fmap.get(ch)==0)
+                fmap.remove(ch);
+        }
+        return '0';
+
+*/
+
+/*
+XOR SOLUTION -:    abcd  abcd t   -> xor of two same digits is zero
+
+1^0 , 0^1 -> 1
+1^1 , 0^0  -> 0
+
+1^0 -> 1
+0^0 -> 0.   [xor is initialized with 0 as xor of any number with zero gives number]
+
+
+*/
+
+class Solution {
+    public char findTheDifference(String s, String t) {
+       int xor = 0;
+        
+       for(char ch: s.toCharArray()){
+           xor^=(int)ch;
+       }
+       for(char ch: t.toCharArray()){
+           xor^=(int)ch;
+       }
+        
+        return (char)xor;
+    }
+}
